@@ -25,9 +25,13 @@ class _LoginScreen extends State<LoginScreen> {
 
       await StorageService().saveLogin();
 
-      if(!mounted)return;
+      if (!mounted) return;
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>HomeScreen()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute
+        (builder: (_) => HomeScreen()),
+      );
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -44,39 +48,53 @@ class _LoginScreen extends State<LoginScreen> {
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(
-                hint: Text("email"),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+            
+           
+                 TextFormField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      hint: Text("email"),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                   
+                    
+                  ),
+
+                  SizedBox(height: 20),
+
+                  TextField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      hint: Text("password"),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 20),
+
+                  ElevatedButton(onPressed:
+                   login, child: Text("login")),
+
+                  SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => SignupScreen()),
+                      );
+                    },
+                    child: Text("Don't you have account"),
+                  ),
+                ],
               ),
             ),
-
-            SizedBox(height: 20),
-
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(
-                hint: Text("password"),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-
-            SizedBox(height: 20),
-
-            ElevatedButton(onPressed: login, child: Text("login")),
-
-            SizedBox(height: 20,),
-            TextButton(onPressed: (){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>SignupScreen()));
-            }, child: Text("Don't you have account",),)
-          ],
-        ),
-      ),
+          
+        
+      
     );
   }
 }
