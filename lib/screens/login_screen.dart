@@ -50,7 +50,7 @@ class _LoginScreen extends State<LoginScreen> {
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
+      ).showSnackBar(SnackBar(content: Text("Invalid email or password")));
     }
   }
 
