@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../sevices/auth_service.dart';
 import '../screens/home_screen.dart';
 import '../sevices/storage_service.dart';
+import '../utils/validators.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,10 +11,22 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends State<LoginScreen> {
+  bool ishidden = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+    
 
   Future<void> login() async {
+    final emailError =  Validators.validateEmail(emailController.text);
+    if(emailError == null || emailError.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('emailError')));
+      }
+
+    final passError =  Validators.validatePassword(emailController.text);
+    if(passError == null || passError.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("passError")));
+      }
+    
     try {
       await AuthService().login(
         emailController.text.trim(),
@@ -39,6 +52,8 @@ class _LoginScreen extends State<LoginScreen> {
     }
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +65,7 @@ class _LoginScreen extends State<LoginScreen> {
           children: [
             
            
-                 TextFormField(
+                 TextField(
                     controller: emailController,
                     decoration: InputDecoration(
                       hint: Text("email"),
@@ -64,13 +79,19 @@ class _LoginScreen extends State<LoginScreen> {
 
                   SizedBox(height: 20),
 
-                  TextField(
+                  TextField( 
+                    obscureText: !ishidden,
                     controller: passwordController,
                     decoration: InputDecoration(
                       hint: Text("password"),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      suffixIcon: IconButton(onPressed: (){
+                        setState(() {
+                          ishidden = !ishidden;
+                        });
+                      }, icon: Icon(ishidden ?Icons.visibility :Icons.visibility_off))
                     ),
                   ),
 

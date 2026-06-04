@@ -1,6 +1,7 @@
 import 'package:app_loc/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import '../sevices/auth_service.dart';
+import '../utils/validators.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -12,6 +13,16 @@ class _SignupScreenState extends State<SignupScreen> {
   final passwordController = TextEditingController();
 
   Future<void> signUp() async {
+    final emailError =  Validators.validateEmail(emailController.text);
+    if(emailError == null || emailError.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('emailError')));
+      }
+
+    final passError =  Validators.validatePassword(emailController.text);
+    if(passError == null || passError.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("passError")));
+      }
+   
     try {
       await AuthService().signUp(
         emailController.text.trim(),
