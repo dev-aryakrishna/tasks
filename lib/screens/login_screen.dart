@@ -18,13 +18,15 @@ class _LoginScreen extends State<LoginScreen> {
 
   Future<void> login() async {
     final emailError =  Validators.validateEmail(emailController.text);
-    if(emailError == null || emailError.isEmpty){
+    if(emailError != null){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('emailError')));
+      return;
       }
 
     final passError =  Validators.validatePassword(emailController.text);
-    if(passError == null || passError.isEmpty){
+    if(passError != null ){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("passError")));
+      return;
       }
     
     try {

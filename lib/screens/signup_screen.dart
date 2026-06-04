@@ -14,12 +14,12 @@ class _SignupScreenState extends State<SignupScreen> {
 
   Future<void> signUp() async {
     final emailError =  Validators.validateEmail(emailController.text);
-    if(emailError == null || emailError.isEmpty){
+    if(emailError != null ){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('emailError')));
       }
 
     final passError =  Validators.validatePassword(emailController.text);
-    if(passError == null || passError.isEmpty){
+    if(passError != null ){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("passError")));
       }
    
