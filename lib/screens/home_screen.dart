@@ -54,7 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
         future: TaskService().getTask(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator()
+            );
           }
           final tasks = snapshot.data!;
           if (tasks.isEmpty) {
@@ -141,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     await TaskService().deleteTask(task.id);
                     setState(() {});
                   },
-                  icon: Icon(Icons.delete_forever_sharp),
+                  icon: Icon(Icons.delete_sweep),
                 ),
 
                 leading: Checkbox(

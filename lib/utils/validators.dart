@@ -79,7 +79,7 @@ class Validators {
 
 
 
-      static String? validateTaskTitile(String title){
+  static String? validateTaskTitile(String title){
 
       if(title.trim().isEmpty){
         return "Please enter title";
@@ -88,13 +88,13 @@ class Validators {
     }
 
 
-    static String? validateDescription(String description){
+  static String? validateDescription(String description){
 
       if(description.trim().isEmpty){
         return "Please enter description";
       }
       return null;
-    }
+  }
 
   
 
