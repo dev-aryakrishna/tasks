@@ -3,9 +3,17 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class AuthService {
   final supabase = Supabase.instance.client;
 
-  Future<void> signUp(String email, String password) async {
+  Future<void> signUp(String name, String phone,String email, String password) async {
     
-    await supabase.auth.signUp(email: email, password: password);
+   final response =  await supabase.auth.signUp(email: email, password: password);
+   final user = response.user;
+   if(user == null){
+    throw Exception("Signup failed");
+   }
+    await supabase.from('profiles').insert({'id':user.id,'name':name , 'phone':phone , 'email':email});
+
+     
+
   }
 
   Future<void> login(String email, String password) async {

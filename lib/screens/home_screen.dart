@@ -4,6 +4,8 @@ import 'package:app_loc/screens/login_screen.dart';
 import 'package:app_loc/sevices/%20task_service.dart';
 import 'package:app_loc/sevices/storage_service.dart';
 import 'package:flutter/material.dart';
+import '../sevices/profile_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,7 +16,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Future<void> logout(BuildContext context) async {
+    await Supabase.instance.client.auth.signOut();
     await StorageService().logout();
+    if (!context.mounted) return;
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => LoginScreen()),
@@ -26,7 +30,19 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home",style: TextStyle(),),
+        backgroundColor: const Color.fromARGB(255, 212, 143, 233),
+        title: FutureBuilder<String>(
+          future: ProfileService().getUserName(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Text("Home");
+            }
+            return Text(
+              "Welcome ${snapshot.data}",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            );
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () => logout(context),

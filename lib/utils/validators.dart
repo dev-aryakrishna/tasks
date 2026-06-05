@@ -14,6 +14,39 @@ class Validators {
     return null;
 
   }
+
+  static String? validateName(String name){
+
+    if(name.trim().isEmpty){
+      return "namw require";
+
+    }
+      
+    if(!RegExp(r'^[a-zA-Z\s]+$').hasMatch(name)){
+      return "Name should contain only letters";
+    }
+    
+    return null;
+
+
+  }
+
+    static String? validatePhone(String phone){
+
+    if(phone.trim().isEmpty){
+      return "name require";
+
+    }
+      
+    if(!RegExp(r'^[0-9]{10}$').hasMatch(phone)){
+      return "phone should contain only numbers";
+    }
+    
+    return null;
+
+  }
+
+  
   static String? validatePassword(String password){
     
      if(password.trim().isEmpty){
@@ -28,6 +61,23 @@ class Validators {
     return null;
 
   }
+
+  static String? validateConfirmPassword(String password , String confirmpassword){
+    
+     if(confirmpassword.trim().isEmpty){
+      return "Please confirm password ";
+
+    }
+      
+    if(password != confirmpassword){
+      return "Passwords do not match";
+    }
+    
+    return null;
+
+  }
+
+
 
       static String? validateTaskTitile(String title){
 
