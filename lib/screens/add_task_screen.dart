@@ -1,9 +1,11 @@
+import 'package:app_loc/utils/app_errors.dart';
 import 'package:app_loc/utils/validators.dart';
 import 'package:flutter/material.dart';
 import '../sevices/ task_service.dart';
 
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({super.key});
+  @override
   State<AddTaskScreen> createState() => _AddTaskScreen();
 }
 
@@ -11,16 +13,19 @@ class _AddTaskScreen extends State<AddTaskScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
+  void _showSnackbar(String errorCode) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppErrors.getMessage(errorCode))));
+    }
   Future<void> saveTask() async {
     final titleError = Validators.validateTaskTitile(titleController.text);
     if (titleError != null){
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(titleError,)));
+       _showSnackbar(titleError);
       return;
     }
 
     final descriptionError = Validators.validateDescription(descriptionController.text);
     if (descriptionError != null){
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(descriptionError,)));
+       _showSnackbar(descriptionError);
       return;
     }
 

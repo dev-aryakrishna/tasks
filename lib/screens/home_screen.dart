@@ -2,10 +2,10 @@ import 'package:app_loc/models/task_model.dart';
 import 'package:app_loc/screens/add_task_screen.dart';
 import 'package:app_loc/screens/login_screen.dart';
 import 'package:app_loc/sevices/%20task_service.dart';
-import 'package:app_loc/sevices/storage_service.dart';
 import 'package:flutter/material.dart';
 import '../sevices/profile_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../sevices/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,8 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Future<void> logout(BuildContext context) async {
-    await Supabase.instance.client.auth.signOut();
-    await StorageService().logout();
+    await AuthService().logout();
     if (!context.mounted) return;
     Navigator.pushAndRemoveUntil(
       context,

@@ -2,8 +2,9 @@ import 'package:app_loc/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import '../sevices/auth_service.dart';
 import '../screens/home_screen.dart';
-import '../sevices/storage_service.dart';
 import '../utils/validators.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../utils/app_errors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,17 +17,19 @@ class _LoginScreen extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
     
+  void _showSnackbar(String errorCode) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppErrors.getMessage(errorCode))));
+    }
 
   Future<void> login() async {
     final emailError =  Validators.validateEmail(emailController.text);
     if(emailError != null){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(emailError,)));
-      return;
-      }
+     _showSnackbar(emailError,);return;}
+      
 
     final passError =  Validators.validatePassword(passwordController.text);
     if(passError != null ){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(passError)));
+      _showSnackbar(passError);
       return;
       }
     
@@ -35,11 +38,7 @@ class _LoginScreen extends State<LoginScreen> {
         emailController.text.trim(),
         passwordController.text,
       );
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("login sucess")));
 
-      await StorageService().saveLogin();
 
       if (!mounted) return;
 
@@ -48,10 +47,11 @@ class _LoginScreen extends State<LoginScreen> {
         MaterialPageRoute
         (builder: (_) => HomeScreen()),
       );
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Invalid email or password")));
+    }on AuthException {
+      _showSnackbar(AppErrors.invalidCredentials);
+    }
+    catch (_) {
+      _showSnackbar(AppErrors.invalidCredentials);
     }
   }
 
@@ -113,6 +113,7 @@ class _LoginScreen extends State<LoginScreen> {
                     },
                     child: Text("Don't you have account"),
                   ),
+                  
                 ],
               ),
             ),

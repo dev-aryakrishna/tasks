@@ -2,8 +2,7 @@ import 'package:app_loc/models/task_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TaskService {
-  final supabase = Supabase.instance.client;
-
+  SupabaseClient get supabase => Supabase.instance.client;
   Future<void> addTask(String title, String description) async {
     final user = supabase.auth.currentUser;
     await supabase.from('tasks').insert({

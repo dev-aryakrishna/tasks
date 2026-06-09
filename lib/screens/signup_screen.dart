@@ -2,6 +2,8 @@ import 'package:app_loc/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import '../sevices/auth_service.dart';
 import '../utils/validators.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../utils/app_errors.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -15,40 +17,44 @@ class _SignupScreenState extends State<SignupScreen> {
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-    final confirmpasswordController = TextEditingController();
+  final confirmpasswordController = TextEditingController();
+
+  void _showSnackbar(String errorCode) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppErrors.getMessage(errorCode))));
+    }
 
 
   Future<void> signUp() async {
 
     final nameError =  Validators.validateName(nameController.text);
     if(nameError != null ){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(nameError)));
+      _showSnackbar(nameError);
       return;
       }
 
       final phoneError =  Validators.validatePhone(phoneController.text);
       if(phoneError != null ){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(phoneError)));
+      _showSnackbar(phoneError);
       return;
       }
     
 
     final emailError =  Validators.validateEmail(emailController.text);
     if(emailError != null ){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(emailError)));
+      _showSnackbar(emailError);
       return;
       }
       
 
     final passError =  Validators.validatePassword(passwordController.text);
     if(passError != null ){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(passError)));
+      _showSnackbar(passError);
       return;
       }
 
     final confirmpassError =  Validators.validateConfirmPassword(passwordController.text, confirmpasswordController.text);
     if(confirmpassError != null ){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(confirmpassError)));
+      _showSnackbar(confirmpassError);
       return;
       }
 
@@ -72,12 +78,17 @@ class _SignupScreenState extends State<SignupScreen> {
      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>LoginScreen()));
      
     } 
-    catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
+    
+    on AuthException catch (e) {
+       final code = e.message.contains("already") ? AppErrors.emailAlreadyInUse : AppErrors.signupFailed;
+      _showSnackbar(code);
+    }
+    catch (_) {
+      _showSnackbar(AppErrors.signupFailed);
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
